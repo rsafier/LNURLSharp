@@ -50,7 +50,7 @@ namespace LNURLSharp.Controllers
         public string WellKnownEndpoint()
         {
             var username = Request.Path.Value.SplitOnLast("/").Last();
-            var response = LNURLSharp.Logic.LNURLPayLogic.BuildLNURLPayResponse($"{username}@{settings.Domain}", $"https://{settings.Domain}/pay/{username}@{settings.Domain}");
+            var response = LNURLSharp.Logic.LNURLPayLogic.BuildLNURLPayResponse($"{username}@{settings.Domain}", $"https://{settings.Domain}/pay/{username}@{settings.Domain}", settings.MinSendable, settings.MaxSendable, settings.CommentAllowed);
             return response.ToJson();
         }
     }

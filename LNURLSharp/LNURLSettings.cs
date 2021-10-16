@@ -9,5 +9,8 @@ namespace LNURLSharp
     {
         public string Domain { get; set; }
         public int InvoiceExpiryInSeconds { get; set; }
+        public ulong MaxSendable { get; set; }
+        public ulong MinSendable { get; set; }
+        public int? CommentAllowed { get; set; }
     }
 }

@@ -43,7 +43,10 @@ dotnet build -c Release -o bin
   },
   "LNURLSettings": {
     "Domain": "test.local",
-    "InvoiceExpiryInSeconds": 600
+    "InvoiceExpiryInSeconds": 600,
+    "MaxSendable": 100000000000,
+    "MinSendable": 1000,
+    "CommentAllowed": 160
   },
   "Kestrel": {
     "Endpoints": {
