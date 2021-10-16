@@ -42,6 +42,16 @@ dotnet build -c Release -o bin
   "LNURLSettings": {
     "Domain": "test.local",
     "InvoiceExpiryInSeconds": 600
+  },
+  "Kestrel": {
+    "Endpoints": {
+      "Http": {
+        "Url": "http://localhost:5000"
+      },
+      "Https": {
+        "Url": "https://localhost:5001"
+      }
+    }
   }
 }
 ```
