@@ -3,7 +3,7 @@
 [![Deploy Nuget Package](https://github.com/rsafier/LNURLSharp/actions/workflows/PublishNuget.yml/badge.svg)](https://github.com/rsafier/LNURLSharp/actions/workflows/PublishNuget.yml)
 ## A simple LNURL server and library package
 
-### Install
+### Build
 ---
 ```
 git clone https://github.com/rsafier/LNURLSharp
@@ -58,4 +58,8 @@ dotnet build -c Release -o bin
 }
 ```
 
-Tips can be send via Lightning Address to: tips@safier.com
+#### Notes
+---
+- Currently only supports LNURLp specs, more to come.
+---
+Lightning Tips to: tips@safier.com

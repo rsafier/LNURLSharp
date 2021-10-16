@@ -36,4 +36,4 @@ public async Task<string> MakeLNURLpInvoiceEndpoint()
 ```
 
 
-Tips can be send via Lightning Address to: tips@safier.com
+Lightning Tips to: tips@safier.com
