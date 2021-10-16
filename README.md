@@ -57,3 +57,5 @@ dotnet build -c Release -o bin
   }
 }
 ```
+
+Tips can be send via Lightning Address to: tips@safier.com
