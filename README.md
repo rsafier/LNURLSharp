@@ -1,4 +1,6 @@
 # LNURLSharp
+[![NuGet version (LNURLSharp.Logic)](https://img.shields.io/nuget/v/LNURLSharp.Logic.svg?style=flat-square)](https://www.nuget.org/packages/LNURLSharp.Logic)
+[![Deploy Nuget Package](https://github.com/rsafier/LNURLSharp/actions/workflows/PublishNuget.yml/badge.svg)](https://github.com/rsafier/LNURLSharp/actions/workflows/PublishNuget.yml)
 ## A simple LNURL server and library package
 
 ### Install
