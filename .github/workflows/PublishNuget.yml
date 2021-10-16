@@ -23,7 +23,7 @@ jobs:
       run: dotnet build --no-restore -c Release
     - name: Pack and Push NuGet Package
       run: |
-        cd LNDroneController.LND
+        cd LNURLSharp.Logic
         dotnet pack --configuration Release
         cd bin/Release/
         package=$(ls LNURLSharp.Logic.*.nupkg)
