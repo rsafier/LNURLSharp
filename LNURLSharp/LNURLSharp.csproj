@@ -12,4 +12,8 @@
     <PackageReference Include="TorHiddenServiceHelper" Version="0.1.1016.1732" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\LNURLSharp.Logic\LNURLSharp.Logic.csproj" />
+  </ItemGroup>
+
 </Project>

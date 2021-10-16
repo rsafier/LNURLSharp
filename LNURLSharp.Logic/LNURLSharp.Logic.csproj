@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+	  <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+	  <PackageProjectUrl>https://github.com/PLEBNET-PLAYGROUND/LNDroneController</PackageProjectUrl>
+	  <PackageId>LNURLSharp.Logic</PackageId>
+	  <Version>0.1.$([System.DateTime]::UtcNow.ToString(MMdd)).$([System.DateTime]::UtcNow.ToString(HHmm))</Version>
+	  <Authors>Richard Safier</Authors>
+	  <PackageDescription>LNURLSharp.Logic LND Implementation</PackageDescription>
+	  <RepositoryUrl>https://github.com/rsafier/LNURLSharp</RepositoryUrl>
+	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="LNDroneController.LND" Version="0.1.1016.836" />
+  </ItemGroup>
+
+</Project>

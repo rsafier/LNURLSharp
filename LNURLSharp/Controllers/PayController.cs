@@ -9,8 +9,8 @@ using ServiceStack;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Mime;
 using System.Threading.Tasks;
+using LNURLSharp.Logic;
 
 namespace LNURLSharp.Controllers
 {
@@ -41,7 +41,7 @@ namespace LNURLSharp.Controllers
             metadata[0, 1] = $"Send sats to {username}";
             metadata[1, 0] = @"text/identifier";
             metadata[1, 1] = $"{username}";
-            var response = await node.BuildLNURLPayInvoiceResponse(amount, metadata, expiryInSeconds: settings.InvoiceExpiryInSeconds);
+            var response = await LNURLSharp.Logic.LNURLPayLogic.BuildLNURLPayInvoiceResponse(node.LightningClient, amount, metadata, expiryInSeconds: settings.InvoiceExpiryInSeconds);
             return response.ToJson();
         }
 
@@ -50,7 +50,7 @@ namespace LNURLSharp.Controllers
         public string WellKnownEndpoint()
         {
             var username = Request.Path.Value.SplitOnLast("/").Last();
-            var response = LNURLPayLogic.BuildLNURLPayResponse($"{username}@{settings.Domain}", $"https://{settings.Domain}/pay/{username}@{settings.Domain}");
+            var response = LNURLSharp.Logic.LNURLPayLogic.BuildLNURLPayResponse($"{username}@{settings.Domain}", $"https://{settings.Domain}/pay/{username}@{settings.Domain}");
             return response.ToJson();
         }
     }
