@@ -16,6 +16,19 @@ namespace LNURLSharp.Logic
     public static class LNURLPayLogic
     {
 
+        /// <summary>
+        /// Generates a LNURLp Response object
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="callbackUri"></param>
+        /// <param name="minSendable"></param>
+        /// <param name="maxSendable"></param>
+        /// <param name="commentAllowedLenght"></param>
+        /// <param name="image"></param>
+        /// <param name="imageMimeType"></param>
+        /// <param name="longText"></param>
+        /// <param name="payerData"></param>
+        /// <returns></returns>
         public static LNURLPayResponse BuildLNURLPayResponse(string username, string callbackUri, ulong minSendable = 1,
             ulong maxSendable = 100000000000, int? commentAllowedLenght = 160, byte[] image = null, string imageMimeType = null, 
             string longText = null, PayerDataType payerData = null)
@@ -56,6 +69,15 @@ namespace LNURLSharp.Logic
             return lightningAddressResponse;
         }
 
+        /// <summary>
+        /// Generates an LNURLp response
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="amount"></param>
+        /// <param name="originalMetadata"></param>
+        /// <param name="payerJsonData"></param>
+        /// <param name="expiryInSeconds"></param>
+        /// <returns></returns>
         public static async Task<LNURLPayInvoiceResponse> BuildLNURLPayInvoiceResponse(this Lnrpc.Lightning.LightningClient client, long amount, string[,] originalMetadata, 
             string payerJsonData = null, int expiryInSeconds = 600)
         {
