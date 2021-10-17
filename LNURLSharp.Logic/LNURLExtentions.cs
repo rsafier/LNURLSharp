@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net.Http;
+using System.Collections.Specialized;
 
 namespace LNURLSharp.Logic
 {
@@ -37,6 +38,24 @@ namespace LNURLSharp.Logic
                     .Replace(lud17Uri.Scheme + ":", lud17Uri.IsOnion() ? "http:" : "https:")),tag);
 
             throw new FormatException("LNURL uses bech32 and 'lnurl' as the hrp (LUD1) or an lnurl LUD17 scheme. ");
+        }
+
+        public static NameValueCollection ParseQueryString(this Uri uri)
+        {
+            NameValueCollection queryParameters = new NameValueCollection();
+            string[] querySegments = uri.Query.Split('&');
+            foreach (string segment in querySegments)
+            {
+                string[] parts = segment.Split('=');
+                if (parts.Length > 0)
+                {
+                    string key = parts[0].Trim(new char[] { '?', ' ' });
+                    string val = parts[1].Trim();
+
+                    queryParameters.Add(key, val);
+                }
+            }
+            return queryParameters;
         }
 
         public static string EncodeLNURL(this Uri serviceUrl)
