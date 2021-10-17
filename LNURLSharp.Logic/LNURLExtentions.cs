@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net.Http;
 using System.Collections.Specialized;
+using System.Text.Json;
 
 namespace LNURLSharp.Logic
 {
@@ -40,7 +41,7 @@ namespace LNURLSharp.Logic
             throw new FormatException("LNURL uses bech32 and 'lnurl' as the hrp (LUD1) or an lnurl LUD17 scheme. ");
         }
 
-        public static NameValueCollection ParseQueryString(this Uri uri)
+        private static NameValueCollection ParseQueryString(this Uri uri)
         {
             NameValueCollection queryParameters = new NameValueCollection();
             string[] querySegments = uri.Query.Split('&');
@@ -74,5 +75,23 @@ namespace LNURLSharp.Logic
                 return false;
             return uri.DnsSafeHost.EndsWith(".onion", StringComparison.OrdinalIgnoreCase);
         }
+
+        public static LNURLPayResponse ToLNURLPayResponse(this JsonDocument d)
+        {
+            var payRequest = new LNURLPayResponse
+            {
+                Callback = d.RootElement.GetProperty("callback").GetString(),
+                MinSendable = d.RootElement.GetProperty("minSendable").GetInt64(),
+                MaxSendable = d.RootElement.GetProperty("maxSendable").GetInt64(),
+                Metadata = d.RootElement.GetProperty("metadata").GetString(),
+            };
+            if (d.RootElement.TryGetProperty("CommentAllowed", out var comment))
+            {
+                payRequest.CommentAllowed = comment.GetInt32();
+            }
+            return payRequest;
+        }
+
+      
     }
 }
