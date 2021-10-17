@@ -3,14 +3,32 @@ using System;
 using System.Threading.Tasks;
 using LNURLSharp.Logic;
 using System.Diagnostics;
+using Lnrpc;
+using LNDroneController.LND;
+using System.Configuration;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace LNURLSharp.Tests
 {
     public class Tests
     {
+        private Lightning.LightningClient lighningClient;
+
+        public IConfigurationRoot configuration { get; private set; }
+        private LNDNodeConnection lndNode;
+
         [SetUp]
         public void Setup()
         {
+            var builder = new ConfigurationBuilder().AddUserSecrets<Tests>();
+            configuration = builder.Build();
+
+            LNDSettings settings = new LNDSettings();
+            configuration.GetSection("LNDSettings").Bind(settings);
+
+            lndNode = new LNDNodeConnection(settings);
+            lighningClient = lndNode.LightningClient;
         }
 
 
@@ -32,6 +50,22 @@ namespace LNURLSharp.Tests
             Assert.That(result.CommentAllowed == null);
             Assert.That(result.Metadata == "[[\"text/plain\",\"Send sats to richardj@safier.com\"],[\"text/identifier\",\"richardj@safier.com\"]]");
             Assert.That(result.Tag == "payRequest");
+        }
+
+        [Test]
+        public async Task LNURLPayrequestGetInvoice()
+        {
+            var result = await LNURLSharp.Logic.LNURLClient.FetchInformation(new Uri("https://safier.com/.well-known/lnurlp/richardj"), new System.Net.Http.HttpClient()) as LNURLPayResponse;
+            Assert.That(result != null);
+            Assert.That(result.MinSendable == 1000);
+            Assert.That(result.MaxSendable == 100000000000);
+            Assert.That(result.Callback == "https://safier.com/pay/richardj@safier.com");
+            Assert.That(result.CommentAllowed == null);
+            Assert.That(result.Metadata == "[[\"text/plain\",\"Send sats to richardj@safier.com\"],[\"text/identifier\",\"richardj@safier.com\"]]");
+            Assert.That(result.Tag == "payRequest");
+            LNURLClient.LNDClient = lighningClient;
+            var payableInvoice = await result.SendRequest(100, new System.Net.Http.HttpClient());
+            Assert.That(payableInvoice.pr != null);
         }
 
         //[Test]

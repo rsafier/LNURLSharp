@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using System.Collections.Specialized;
 using System.Text.Json;
+using System.Net;
 
 namespace LNURLSharp.Logic
 {
@@ -41,7 +42,16 @@ namespace LNURLSharp.Logic
             throw new FormatException("LNURL uses bech32 and 'lnurl' as the hrp (LUD1) or an lnurl LUD17 scheme. ");
         }
 
-        private static NameValueCollection ParseQueryString(this Uri uri)
+        internal static void AppendPayloadToQuery(this UriBuilder uri, string key, string value)
+        {
+            if (uri.Query.Length > 1)
+                uri.Query += "&";
+
+            uri.Query = uri.Query + WebUtility.UrlEncode(key) + "=" +
+                        WebUtility.UrlEncode(value);
+        }
+
+        internal static NameValueCollection ParseQueryString(this Uri uri)
         {
             NameValueCollection queryParameters = new NameValueCollection();
             string[] querySegments = uri.Query.Split('&');
@@ -92,6 +102,15 @@ namespace LNURLSharp.Logic
             return payRequest;
         }
 
-      
+        public static LNURLPayInvoiceResponse ToLNURLPayInvoiceResponse(this JsonDocument d)
+        {
+            var payInvoice = new LNURLPayInvoiceResponse
+            {
+                pr = d.RootElement.GetProperty("pr").GetString(),
+            };
+            return payInvoice;
+        }
+
+
     }
 }

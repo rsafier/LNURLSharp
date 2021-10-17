@@ -8,8 +8,9 @@ using System.Text.Json;
 
 namespace LNURLSharp.Logic
 {
-    public static partial class LNURLClient
+    public static class LNURLClient
     {
+        public static Lnrpc.Lightning.LightningClient LNDClient { get; set; }
 
         public static async Task<object> FetchInformation(Uri lnUrl, HttpClient httpClient)
         {
@@ -73,6 +74,29 @@ namespace LNURLSharp.Logic
                     return FetchInformation(response, tag);
             }
         }
+
+        public static async Task<LNURLPayInvoiceResponse> SendRequest(this LNURLPayResponse request, long amount,
+           HttpClient httpClient, string comment = null)
+        {
+            var uriBuilder = new UriBuilder(request.Callback);
+            uriBuilder.AppendPayloadToQuery( "amount", amount.ToString());
+            if (!string.IsNullOrEmpty(comment)) uriBuilder.AppendPayloadToQuery( "comment", comment);
+
+            var response = await JsonDocument.ParseAsync(await httpClient.GetStreamAsync(uriBuilder.Uri));
+            if (IsErrorResponse(response)) throw new Exception("Something went really wrong");
+
+            var lnurlPayInvoice = response.ToLNURLPayInvoiceResponse();
+
+            //Verify Hash
+            if (await LNDClient.VerifyLNURLPayInvoice(request, lnurlPayInvoice.pr))
+            {
+                return lnurlPayInvoice;
+            }
+
+            throw new Exception(
+                "LNURL payRequest returned an invoice but its amount or hash did not match the request");
+        }
+
 
         private static object FetchInformation(JsonDocument response, string tag)
         {
