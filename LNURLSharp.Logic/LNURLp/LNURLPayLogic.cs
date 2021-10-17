@@ -29,8 +29,8 @@ namespace LNURLSharp.Logic
         /// <param name="longText"></param>
         /// <param name="payerData"></param>
         /// <returns></returns>
-        public static LNURLPayResponse BuildLNURLPayResponse(string username, string callbackUri, ulong minSendable = 1,
-            ulong maxSendable = 100000000000, int? commentAllowedLenght = 160, byte[] image = null, string imageMimeType = null, 
+        public static LNURLPayResponse BuildLNURLPayResponse(string username, string callbackUri, long minSendable = 1,
+            long maxSendable = 100000000000, int? commentAllowedLenght = 160, byte[] image = null, string imageMimeType = null, 
             string longText = null, PayerDataType payerData = null)
         {
             var lightningAddressResponse = new LNURLPayResponse()

@@ -3,7 +3,7 @@
 [![Deploy Nuget Package](https://github.com/rsafier/LNURLSharp/actions/workflows/PublishNuget.yml/badge.svg)](https://github.com/rsafier/LNURLSharp/actions/workflows/PublishNuget.yml)
 ## Simple LNURL Server-side logic
 
-### Example use cases
+### Very simplistic example use cases
 BuildLNURLPayResponse for a lightning address endpoint
 ```
 [HttpGet]

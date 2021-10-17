@@ -8,6 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ServiceStack.Text;
+using LNDroneController.LND;
 
 namespace LNURLSharp
 {
@@ -25,8 +27,10 @@ namespace LNURLSharp
                     webBuilder.UseStartup<Startup>();
                 })
                 .UseSerilog((hostingContext, loggerConfiguration) => loggerConfiguration.ReadFrom.Configuration(hostingContext.Configuration))
-            .ConfigureServices((context, services) => {
+            .ConfigureServices((context, services) =>
+            {
                 services.AddOptions<LNURLSettings>().Bind(context.Configuration.GetSection("LNURLSettings"));
+                services.AddOptions();
             });
     }
 }
