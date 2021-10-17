@@ -1,5 +1,4 @@
 ﻿using LNDroneController.LND;
-using LNDroneController.LND.LNURL;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;

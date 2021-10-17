@@ -26,7 +26,10 @@ namespace LNURLSharp
         public void ConfigureServices(IServiceCollection services)
         {
             LNDSettings lndSettings = new LNDSettings();
+            LNURLSettings lnurlSettings = new LNURLSettings();
+
             Configuration.GetSection("LNDSettings").Bind(lndSettings);
+            Configuration.GetSection("LNURLSettings").Bind(lnurlSettings);
 
             var myLndNode = new LNDNodeConnection(lndSettings);
             services.AddControllers(options =>
@@ -39,6 +42,12 @@ namespace LNURLSharp
             services.AddOptions();
             services.AddHttpContextAccessor();
             services.AddSingleton(myLndNode);
+
+            if (lnurlSettings.EnableTorEndpoint)
+            {
+                throw new NotImplementedException("I'll get to it.");
+            }
+
             services.Configure<ForwardedHeadersOptions>(options =>
             {
                 options.ForwardLimit = 1;

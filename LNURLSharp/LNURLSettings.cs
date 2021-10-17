@@ -12,5 +12,6 @@ namespace LNURLSharp
         public ulong MaxSendable { get; set; }
         public ulong MinSendable { get; set; }
         public int? CommentAllowed { get; set; }
+        public bool EnableTorEndpoint { get; set; }
     }
 }

@@ -46,7 +46,8 @@ dotnet build -c Release -o bin
     "InvoiceExpiryInSeconds": 600,
     "MaxSendable": 100000000000,
     "MinSendable": 1000,
-    "CommentAllowed": 160
+    "CommentAllowed": 160,
+    "EnableTorEndpoint": false
   },
   "Kestrel": {
     "Endpoints": {
