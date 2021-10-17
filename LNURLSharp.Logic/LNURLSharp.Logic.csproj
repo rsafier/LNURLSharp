@@ -10,6 +10,7 @@
 	  <PackageDescription>LNURLSharp.Logic LND Implementation</PackageDescription>
 	  <RepositoryUrl>https://github.com/rsafier/LNURLSharp</RepositoryUrl>
 	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
+	  <PackageTags>net5.0 lnurl lightning lnd bitcoin</PackageTags>
 	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
