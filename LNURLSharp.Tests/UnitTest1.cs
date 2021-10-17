@@ -64,8 +64,15 @@ namespace LNURLSharp.Tests
             Assert.That(result.Metadata == "[[\"text/plain\",\"Send sats to richardj@safier.com\"],[\"text/identifier\",\"richardj@safier.com\"]]");
             Assert.That(result.Tag == "payRequest");
             LNURLClient.LNDClient = lighningClient;
-            var payableInvoice = await result.SendRequest(100, new System.Net.Http.HttpClient());
+            var payableInvoice = await result.SendRequest(1001, new System.Net.Http.HttpClient());
             Assert.That(payableInvoice.pr != null);
+        }
+        [Test]
+        public   async Task LNURLPayrequestShouldError()
+        {
+            var result = await LNURLSharp.Logic.LNURLClient.FetchInformation(new Uri("https://zbd.gg/.well-known/lnurlp/xenonfun"), new System.Net.Http.HttpClient()) as LNURLPayResponse;
+            var payableInvoice = await result.SendRequest(1, new System.Net.Http.HttpClient());
+            Assert.That(payableInvoice.Status.Equals("error", StringComparison.InvariantCultureIgnoreCase));
         }
 
         //[Test]

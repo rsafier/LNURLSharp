@@ -101,7 +101,7 @@ namespace LNURLSharp.Logic
             return response;
         }
 
-        public static async Task<bool> VerifyLNURLPayInvoice(this Lnrpc.Lightning.LightningClient client, LNURLPayResponse req, string payRequest) 
+        public static async Task<bool> VerifyLNURLPayInvoice(this Lnrpc.Lightning.LightningClient client, LNURLPayResponse req, string payRequest, long amount) 
         {
             var decoded = await client.DecodePayReqAsync(new Lnrpc.PayReqString
             {
@@ -110,7 +110,7 @@ namespace LNURLSharp.Logic
             var dh = decoded.DescriptionHash;
             using var sha256 = SHA256.Create();
             var descriptionHash = sha256.ComputeHash(req.Metadata.ToUtf8Bytes());
-            return (descriptionHash.ToHex() == decoded.DescriptionHash);
+            return descriptionHash.ToHex() == decoded.DescriptionHash && decoded.NumMsat == amount;
         }
 
     }

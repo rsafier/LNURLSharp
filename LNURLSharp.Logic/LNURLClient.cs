@@ -79,16 +79,16 @@ namespace LNURLSharp.Logic
            HttpClient httpClient, string comment = null)
         {
             var uriBuilder = new UriBuilder(request.Callback);
-            uriBuilder.AppendPayloadToQuery( "amount", amount.ToString());
-            if (!string.IsNullOrEmpty(comment)) uriBuilder.AppendPayloadToQuery( "comment", comment);
+            uriBuilder.AppendPayloadToQuery("amount", amount.ToString());
+            if (!string.IsNullOrEmpty(comment)) uriBuilder.AppendPayloadToQuery("comment", comment);
 
             var response = await JsonDocument.ParseAsync(await httpClient.GetStreamAsync(uriBuilder.Uri));
-            if (IsErrorResponse(response)) throw new Exception("Something went really wrong");
+            if (IsErrorResponse(response)) return new LNURLPayInvoiceResponse(response);
 
             var lnurlPayInvoice = response.ToLNURLPayInvoiceResponse();
 
             //Verify Hash
-            if (await LNDClient.VerifyLNURLPayInvoice(request, lnurlPayInvoice.pr))
+            if (await LNDClient.VerifyLNURLPayInvoice(request, lnurlPayInvoice.pr, amount))
             {
                 return lnurlPayInvoice;
             }
@@ -100,7 +100,7 @@ namespace LNURLSharp.Logic
 
         private static object FetchInformation(JsonDocument response, string tag)
         {
-            if (IsErrorResponse(response)) return response;
+            if (IsErrorResponse(response)) return new LNURLStatusResponse(response);
 
             switch (tag)
             {
@@ -126,5 +126,7 @@ namespace LNURLSharp.Logic
             }
             return false;
         }
+
+
     }
 }
