@@ -35,7 +35,7 @@ namespace LNURLSharp
             services.AddControllers();
             services.AddHttpContextAccessor();
 
-
+            services.AddDbContext<LNURLContext>();
             if (lnurlSettings.EnableTorEndpoint)
             {
                 throw new NotImplementedException("I'll get to it.");
@@ -56,8 +56,10 @@ namespace LNURLSharp
 
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, LNURLContext dbContext)
         {
+            dbContext.Database.Migrate(); //autocreate DB or apply new migrations
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
