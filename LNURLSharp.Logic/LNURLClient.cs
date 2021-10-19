@@ -5,12 +5,12 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Text.Json;
+using static Lnrpc.Lightning;
 
 namespace LNURLSharp.Logic
 {
     public static class LNURLClient
     {
-        public static Lnrpc.Lightning.LightningClient LNDClient { get; set; }
 
         public static async Task<object> FetchInformation(Uri lnUrl, HttpClient httpClient)
         {
@@ -75,7 +75,7 @@ namespace LNURLSharp.Logic
             }
         }
 
-        public static async Task<LNURLPayInvoiceResponse> SendRequest(this LNURLPayResponse request, long amount,
+        public static async Task<LNURLPayInvoiceResponse> SendRequest(this LNURLPayResponse request, LightningClient client, long amount,
            HttpClient httpClient, string comment = null)
         {
             var uriBuilder = new UriBuilder(request.Callback);
@@ -86,9 +86,9 @@ namespace LNURLSharp.Logic
             if (IsErrorResponse(response)) return new LNURLPayInvoiceResponse(response);
 
             var lnurlPayInvoice = response.ToLNURLPayInvoiceResponse();
-
+            
             //Verify Hash
-            if (await LNDClient.VerifyLNURLPayInvoice(request, lnurlPayInvoice.pr, amount))
+            if (await client.VerifyLNURLPayInvoice(request, lnurlPayInvoice.pr, amount))
             {
                 return lnurlPayInvoice;
             }
