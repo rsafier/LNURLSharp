@@ -42,6 +42,11 @@ namespace LNURLSharp.Logic
             throw new FormatException("LNURL uses bech32 and 'lnurl' as the hrp (LUD1) or an lnurl LUD17 scheme. ");
         }
 
+        public static string ToLNURL(this string urlToEncode)
+        {
+            return Bech32Engine.Encode("lnurl", Encoding.UTF8.GetBytes(urlToEncode));
+        }
+
         internal static void AppendPayloadToQuery(this UriBuilder uri, string key, string value)
         {
             if (uri.Query.Length > 1)

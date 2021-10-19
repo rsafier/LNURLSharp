@@ -32,7 +32,14 @@ namespace LNURLSharp.Tests
             lighningClient = lndNode.LightningClient;
         }
 
-
+        [Test]
+        public async Task LNURLEncodeDecode()
+        {
+            var url = "lightning:https://safier.com/.well-known/lnurlp/richardj";
+            var lnurl = url.ToLNURL();
+            var decoded = lnurl.ParseLNURL();
+            Assert.That(decoded.uri == new Uri(url));
+        }
         [Test]
         public async Task LNURLDecode()
         {
