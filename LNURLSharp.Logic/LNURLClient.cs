@@ -117,7 +117,7 @@ namespace LNURLSharp.Logic
 
         private static bool IsErrorResponse(JsonDocument response)
         {
-            if (response.RootElement.TryGetProperty("status", out var value))
+            if (response.RootElement.TryGetProperty("status", out var value) && value.ValueKind != JsonValueKind.Null)
             {
                 if (value.GetString().Equals("Error", StringComparison.InvariantCultureIgnoreCase))
                 {
