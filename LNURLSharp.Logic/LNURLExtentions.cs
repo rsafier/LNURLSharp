@@ -54,10 +54,10 @@ namespace LNURLSharp.Logic
         internal static NameValueCollection ParseQueryString(this Uri uri)
         {
             NameValueCollection queryParameters = new NameValueCollection();
-            string[] querySegments = uri.Query.Split('&');
+            string[] querySegments = uri.Query.Split('&',StringSplitOptions.RemoveEmptyEntries);
             foreach (string segment in querySegments)
             {
-                string[] parts = segment.Split('=');
+                string[] parts = segment.Split('=',StringSplitOptions.RemoveEmptyEntries);
                 if (parts.Length > 0)
                 {
                     string key = parts[0].Trim(new char[] { '?', ' ' });

@@ -8,6 +8,7 @@ using LNDroneController.LND;
 using System.Configuration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ServiceStack.Text;
 
 namespace LNURLSharp.Tests
 {
@@ -39,6 +40,12 @@ namespace LNURLSharp.Tests
             Assert.That(result.uri == new Uri("http://signet.xenon.fun:80/lnurl?q=1d47ce51cdaa79b2d5052815f03e6ed49977160ebeca9d3cf5d28a5b870c716e"));
         }
 
+        [Test]
+        public async Task LNURLDecode2()
+        {
+            var result = "lnurl1dp68gurn8ghj7umpve5k2u3wvdhk6tewwajkcmpdddhx7amw9akxuatjd3cz7unfvd5xzunydg4cghmg".ParseLNURL();
+            result.PrintDump();
+        }
         [Test]
         public async Task LNURLPayrequest()
         {
