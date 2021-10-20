@@ -13,6 +13,7 @@ namespace LNURLSharp
         public PaySettings Pay { get; set; }
 
         public List<LNDSettings> LNDNodes { get; set; }
+        public string DbPath { get; set; }
     }
 
     public class PaySettings

@@ -1,21 +1,28 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-	  <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-	  <PackageProjectUrl>https://github.com/PLEBNET-PLAYGROUND/LNDroneController</PackageProjectUrl>
-	  <PackageId>LNURLSharp.Logic</PackageId>
-	  <Version>0.1.$([System.DateTime]::UtcNow.ToString(MMdd)).$([System.DateTime]::UtcNow.ToString(HHmm))</Version>
-	  <Authors>Richard Safier</Authors>
-	  <PackageDescription>LNURLSharp.Logic LND Implementation</PackageDescription>
-	  <RepositoryUrl>https://github.com/rsafier/LNURLSharp</RepositoryUrl>
-	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
-	  <PackageTags>net5.0 lnurl lightning lnd bitcoin</PackageTags>
-	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net5.0</TargetFramework>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<PackageProjectUrl>https://github.com/PLEBNET-PLAYGROUND/LNDroneController</PackageProjectUrl>
+		<PackageId>LNURLSharp.Logic</PackageId>
+		<Version>0.1.$([System.DateTime]::UtcNow.ToString(MMdd)).$([System.DateTime]::UtcNow.ToString(HHmm))</Version>
+		<Authors>Richard Safier</Authors>
+		<PackageDescription>LNURLSharp.Logic LND Implementation</PackageDescription>
+		<RepositoryUrl>https://github.com/rsafier/LNURLSharp</RepositoryUrl>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageTags>net5.0 lnurl lightning lnd bitcoin</PackageTags>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="LNDroneController.LND" Version="0.1.1017.142" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="LNDroneController.LND" Version="0.1.1017.142" />
+		<PackageReference Include="Microsoft.Data.Sqlite.Core" Version="5.0.11" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.11" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.11">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.11" />
+	</ItemGroup>
 
 </Project>

@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using LNURLSharp.Logic;
 using System.Diagnostics;
 using LNURLSharp.DB;
+using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
 
 namespace LNURLSharp.Controllers
 {
@@ -23,7 +24,7 @@ namespace LNURLSharp.Controllers
         private LNDNodeConnection node;
         private LNURLContext db;
 
-        public PayController(IOptions<LNURLSettings> options, ILogger<PayController> logger, 
+        public PayController(Microsoft.Extensions.Options.IOptions<LNURLSettings> options, ILogger<PayController> logger, 
             IServiceProvider provider, LNURLContext context)
         {
             settings = options.Value;

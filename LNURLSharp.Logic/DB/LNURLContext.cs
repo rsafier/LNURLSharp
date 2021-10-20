@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -17,10 +18,10 @@ namespace LNURLSharp.DB
 
         public string DbPath { get; private set; }
 
-        public LNURLContext()
+        public LNURLContext(IOptions<LNURLSettings> settings)
         {
-            var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location); 
-            DbPath = $"{path}{System.IO.Path.DirectorySeparatorChar}LNURLSharp.db";
+            var path =settings.Value.DbPath ?? $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}{System.IO.Path.DirectorySeparatorChar}LNURLSharp.db"; 
+            DbPath = path;
         }
 
         // The following configures EF to create a Sqlite database file in the

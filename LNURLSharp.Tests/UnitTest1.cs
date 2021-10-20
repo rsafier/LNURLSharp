@@ -9,6 +9,7 @@ using System.Configuration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ServiceStack.Text;
+using ServiceStack;
 
 namespace LNURLSharp.Tests
 {
@@ -24,8 +25,8 @@ namespace LNURLSharp.Tests
         {
             var builder = new ConfigurationBuilder().AddUserSecrets<Tests>();
             configuration = builder.Build();
-
             LNDSettings settings = new LNDSettings();
+
             configuration.GetSection("LNDSettings").Bind(settings);
 
             lndNode = new LNDNodeConnection(settings);
@@ -60,7 +61,7 @@ namespace LNURLSharp.Tests
             Assert.That(result != null);
             Assert.That(result.MinSendable == 1000);
             Assert.That(result.MaxSendable == 100000000000);
-            Assert.That(result.Callback == "https://safier.com/pay/richardj@safier.com");
+            Assert.That(result.Callback.UrlDecode() == "https://safier.com/pay/richardj@safier.com");
             Assert.That(result.CommentAllowed == null);
             Assert.That(result.Metadata == "[[\"text/plain\",\"Send sats to richardj@safier.com\"],[\"text/identifier\",\"richardj@safier.com\"]]");
             Assert.That(result.Tag == "payRequest");
@@ -73,7 +74,7 @@ namespace LNURLSharp.Tests
             Assert.That(result != null);
             Assert.That(result.MinSendable == 1000);
             Assert.That(result.MaxSendable == 100000000000);
-            Assert.That(result.Callback == "https://safier.com/pay/richardj@safier.com");
+            Assert.That(result.Callback.UrlDecode() == "https://safier.com/pay/richardj@safier.com");
             Assert.That(result.CommentAllowed == null);
             Assert.That(result.Metadata == "[[\"text/plain\",\"Send sats to richardj@safier.com\"],[\"text/identifier\",\"richardj@safier.com\"]]");
             Assert.That(result.Tag == "payRequest"); 
