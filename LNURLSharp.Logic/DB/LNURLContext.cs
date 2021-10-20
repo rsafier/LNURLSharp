@@ -18,14 +18,21 @@ namespace LNURLSharp.DB
 
         public string DbPath { get; private set; }
 
+        public LNURLContext()
+        {
+            var path = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}{System.IO.Path.DirectorySeparatorChar}LNURLSharp.db";
+            DbPath = path;
+        }
+        public LNURLContext(string path)
+        {
+            DbPath = path;
+        }
         public LNURLContext(IOptions<LNURLSettings> settings)
         {
             var path =settings.Value.DbPath ?? $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}{System.IO.Path.DirectorySeparatorChar}LNURLSharp.db"; 
             DbPath = path;
         }
 
-        // The following configures EF to create a Sqlite database file in the
-        // special "local" folder for your platform.
         protected override void OnConfiguring(DbContextOptionsBuilder options)
             => options.UseSqlite($"Data Source={DbPath}");
     }

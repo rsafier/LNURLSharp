@@ -35,5 +35,7 @@ public async Task<string> MakeLNURLpInvoiceEndpoint()
         }
 ```
 
+#### Database definitions
+- Includes EF Core Context for 3rd party program to read from LNURL Server database
 
 Lightning Tips to: tips@safier.com
