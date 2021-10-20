@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -29,13 +30,14 @@ namespace LNURLSharp
         public void ConfigureServices(IServiceCollection services)
         {
             LNURLSettings lnurlSettings = Configuration.GetSection("LNURLSettings").Get<LNURLSettings>();
-
             var myLndNode = new LNDNodeConnection(lnurlSettings.LNDNodes.First());
+
+            services.AddDbContext<LNURLContext>();
+
             services.AddSingleton(myLndNode);
             services.AddControllers();
             services.AddHttpContextAccessor();
 
-            services.AddDbContext<LNURLContext>();
             if (lnurlSettings.EnableTorEndpoint)
             {
                 throw new NotImplementedException("I'll get to it.");
@@ -56,9 +58,23 @@ namespace LNURLSharp
 
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, LNURLContext dbContext)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, LNURLContext dbContext, LNDNodeConnection nodeConnection, ILogger<Startup> logger)
         {
             dbContext.Database.Migrate(); //autocreate DB or apply new migrations
+            
+            if (!dbContext.LNDServers.Any(t => t.Pubkey == nodeConnection.LocalNodePubKey))
+            {
+                var lnd = dbContext.LNDServers.Add(new LNDServer
+                {
+                    Pubkey = nodeConnection.LocalNodePubKey
+                });
+                dbContext.SaveChanges();
+                logger.LogInformation("Node {Pubkey} added to db.",nodeConnection.LocalNodePubKey);
+            }
+            else
+            {
+                logger.LogInformation("Node {Pubkey} exists in db.", nodeConnection.LocalNodePubKey);
+            }
 
             if (env.IsDevelopment())
             {

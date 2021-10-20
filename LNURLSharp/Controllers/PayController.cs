@@ -11,6 +11,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using LNURLSharp.Logic;
 using System.Diagnostics;
+using LNURLSharp.DB;
 
 namespace LNURLSharp.Controllers
 {
@@ -20,18 +21,21 @@ namespace LNURLSharp.Controllers
         private LNURLSettings settings;
         private ILogger<PayController> logger;
         private LNDNodeConnection node;
+        private LNURLContext db;
 
-        public PayController(IOptions<LNURLSettings> options, ILogger<PayController> logger, IServiceProvider provider)
+        public PayController(IOptions<LNURLSettings> options, ILogger<PayController> logger, 
+            IServiceProvider provider, LNURLContext context)
         {
             settings = options.Value;
             this.logger = logger;
             node = provider.GetRequiredService<LNDNodeConnection>();
+            db = context;
         }
 
         [HttpGet]
         [Route("/pay/{Username}")]
         public async Task<string> MakeLNURLpInvoiceEndpoint()
-        {
+        {           
             var username = Request.Path.Value.SplitOnLast("/").Last();
             var amount = long.Parse(Request.Query["amount"]);
             Request.Query.TryGetValue("comment", out var comment);
@@ -65,6 +69,18 @@ namespace LNURLSharp.Controllers
             metadata[1, 0] = @"text/identifier";
             metadata[1, 1] = $"{username}";
             var response = await LNURLSharp.Logic.LNURLPayLogic.BuildLNURLPayInvoiceResponse(node.LightningClient, amount, metadata, expiryInSeconds: settings.Pay.InvoiceExpiryInSeconds);
+
+            db.Invoices.Add(new Invoice
+            {
+                Comment = comment,
+                CreateDate = DateTime.UtcNow,
+                Username =username,
+                LNDServerPubkey = node.LocalNodePubKey,
+                Metadata = metadata.ToJson(),
+                Payreq = response.pr,
+            });
+            db.SaveChanges();
+            db.Dispose();
             return response.ToJson();
         }
 

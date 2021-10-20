@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LNURLSharp.Migrations
 {
     [DbContext(typeof(LNURLContext))]
-    [Migration("20211017225702_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20211020001440_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -30,8 +30,8 @@ namespace LNURLSharp.Migrations
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("LNDServerId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("LNDServerPubkey")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Metadata")
                         .HasColumnType("TEXT");
@@ -39,23 +39,30 @@ namespace LNURLSharp.Migrations
                     b.Property<string>("Payreq")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Username")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("InvoiceId");
 
-                    b.HasIndex("LNDServerId");
+                    b.HasIndex("LNDServerPubkey");
+
+                    b.HasIndex("Payreq")
+                        .IsUnique();
+
+                    b.HasIndex("Username");
 
                     b.ToTable("Invoices");
                 });
 
             modelBuilder.Entity("LNURLSharp.DB.LNDServer", b =>
                 {
-                    b.Property<int>("LNDServerId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("Pubkey")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("LNDServerId");
+                    b.HasKey("Pubkey");
+
+                    b.HasIndex("Pubkey")
+                        .IsUnique();
 
                     b.ToTable("LNDServers");
                 });
@@ -75,9 +82,7 @@ namespace LNURLSharp.Migrations
                 {
                     b.HasOne("LNURLSharp.DB.LNDServer", "LNDServer")
                         .WithMany("Invoices")
-                        .HasForeignKey("LNDServerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("LNDServerPubkey");
 
                     b.Navigation("LNDServer");
                 });
