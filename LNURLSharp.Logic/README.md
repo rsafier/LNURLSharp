@@ -39,3 +39,6 @@ public async Task<string> MakeLNURLpInvoiceEndpoint()
 - Includes EF Core Context for 3rd party program to read from LNURL Server database
 
 Lightning Tips to: tips@safier.com
+
+LNURLp QR: 
+![LNURLp Donation Link](https://github.com/rsafier/LNURLSharp/raw/master/richardj-qr-code.png)

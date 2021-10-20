@@ -13,6 +13,10 @@ using LNURLSharp.Logic;
 using System.Diagnostics;
 using LNURLSharp.DB;
 using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
+using QRCoder;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 
 namespace LNURLSharp.Controllers
 {
@@ -83,6 +87,21 @@ namespace LNURLSharp.Controllers
             db.SaveChanges();
             db.Dispose();
             return response.ToJson();
+        }
+
+        [HttpGet]
+        [Route("/lnurl/pay/{username}")]
+        public IActionResult GenerateLNURLPayQR(string username)
+        {
+            QRCodeGenerator qrGenerator = new QRCodeGenerator();
+            var lnurl = $"https://{settings.Domain}/.well-known/lnurlp/{username}@{settings.Domain}".ToLNURL().ToUpper();
+            QRCodeData qrCodeData = qrGenerator.CreateQrCode($"lightning:{lnurl}", QRCodeGenerator.ECCLevel.Q);
+            QRCode qrCode = new QRCode(qrCodeData);
+            Bitmap qrCodeImage = qrCode.GetGraphic(20);
+            var ms = new MemoryStream();
+            qrCodeImage.Save(ms, ImageFormat.Png);
+            ms.Position = 0;
+            return File(ms, "image/png");
         }
 
         [HttpGet]

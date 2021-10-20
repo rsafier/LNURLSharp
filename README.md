@@ -82,3 +82,6 @@ dotnet build -c Release -o bin
 - Currently only supports LNURLp specs, more to come.
 ---
 Lightning Tips to: tips@safier.com
+
+LNURLp QR: 
+![LNURLp Donation Link](https://github.com/rsafier/LNURLSharp/raw/master/richardj-qr-code.png)
