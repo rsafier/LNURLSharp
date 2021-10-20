@@ -27,17 +27,17 @@ namespace LNURLSharp.Logic
             if (lnurl.StartsWith("lnurl1", StringComparison.InvariantCultureIgnoreCase))
             {
                 Bech32Engine.Decode(lnurl, out _, out var data);
-                var result = new Uri(Encoding.UTF8.GetString(data)); 
+                var result = new Uri(Encoding.UTF8.GetString(data));
 
                 var query = result.ParseQueryString();
                 tag = query.Get("tag");
-                return (result,tag);
+                return (result, tag);
             }
 
             if (Uri.TryCreate(lnurl, UriKind.Absolute, out var lud17Uri) &&
                 SchemeTagMapping.TryGetValue(lud17Uri.Scheme.ToLowerInvariant(), out tag))
                 return (new Uri(lud17Uri.ToString()
-                    .Replace(lud17Uri.Scheme + ":", lud17Uri.IsOnion() ? "http:" : "https:")),tag);
+                    .Replace(lud17Uri.Scheme + ":", lud17Uri.IsOnion() ? "http:" : "https:")), tag);
 
             throw new FormatException("LNURL uses bech32 and 'lnurl' as the hrp (LUD1) or an lnurl LUD17 scheme. ");
         }
@@ -59,10 +59,10 @@ namespace LNURLSharp.Logic
         internal static NameValueCollection ParseQueryString(this Uri uri)
         {
             NameValueCollection queryParameters = new NameValueCollection();
-            string[] querySegments = uri.Query.Split('&',StringSplitOptions.RemoveEmptyEntries);
+            string[] querySegments = uri.Query.Split('&', StringSplitOptions.RemoveEmptyEntries);
             foreach (string segment in querySegments)
             {
-                string[] parts = segment.Split('=',StringSplitOptions.RemoveEmptyEntries);
+                string[] parts = segment.Split('=', StringSplitOptions.RemoveEmptyEntries);
                 if (parts.Length > 0)
                 {
                     string key = parts[0].Trim(new char[] { '?', ' ' });
@@ -105,6 +105,32 @@ namespace LNURLSharp.Logic
                 payRequest.CommentAllowed = comment.GetInt32();
             }
             return payRequest;
+        }
+
+        public static LNURLWithdrawRequest ToLNURLWithdrawRequest(this JsonDocument d)
+        {
+            var withdrawRequest = new LNURLWithdrawRequest
+            {
+                Callback = d.RootElement.GetProperty("callback").GetString(),
+                Tag = d.RootElement.GetProperty("tag").GetString(),
+                MaxWithdrawable = d.RootElement.GetProperty("maxWithdrawable").GetInt64(),
+                MinWithdrawable = d.RootElement.GetProperty("minWithdrawable").GetInt64(),
+                K1 = d.RootElement.GetProperty("k1").GetString(),
+            };
+            withdrawRequest.CurrentBalance = withdrawRequest.MaxWithdrawable;
+            if (d.RootElement.TryGetProperty("payLink", out var payLink))
+            {
+                withdrawRequest.PayLink = payLink.GetString();
+            }
+            if (d.RootElement.TryGetProperty("defaultDescription", out var defaultDescription))
+            {
+                withdrawRequest.DefaultDescription = defaultDescription.GetString();
+            }
+            if (d.RootElement.TryGetProperty("balanceCheck", out var balanceCheck))
+            {
+                withdrawRequest.BalanceCheck = balanceCheck.GetString();
+            }
+            return withdrawRequest;
         }
 
         public static LNURLPayInvoiceResponse ToLNURLPayInvoiceResponse(this JsonDocument d)

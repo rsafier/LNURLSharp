@@ -97,6 +97,18 @@ namespace LNURLSharp.Logic
                 "LNURL payRequest returned an invoice but its amount or hash did not match the request");
         }
 
+        public static async Task<LNURLStatusResponse> SendRequest(this LNURLWithdrawRequest request, string bolt11, HttpClient httpClient,
+           Uri balanceNotify = null)
+        {
+            var url = request.Callback;
+            var uriBuilder = new UriBuilder(url);
+            uriBuilder.AppendPayloadToQuery("pr", bolt11);
+            if (balanceNotify != null) uriBuilder.AppendPayloadToQuery("balanceNotify", balanceNotify.ToString());
+
+            var response = JsonDocument.Parse(await httpClient.GetStringAsync(uriBuilder.Uri));
+
+            return new LNURLStatusResponse(response);
+        }
 
         private static object FetchInformation(JsonDocument response, string tag)
         {
@@ -104,10 +116,8 @@ namespace LNURLSharp.Logic
 
             switch (tag)
             {
-                //case "channelRequest":
-                //    return response.ToObject<LNURLChannelRequest>();
-                //case "withdrawRequest":
-                //    return response.ToObject<LNURLWithdrawRequest>();
+                case "withdrawRequest":
+                    return response.ToLNURLWithdrawRequest();
                 case "payRequest":
                     return response.ToLNURLPayResponse();
                 default:

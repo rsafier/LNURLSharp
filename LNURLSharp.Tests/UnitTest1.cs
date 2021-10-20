@@ -55,7 +55,7 @@ namespace LNURLSharp.Tests
             result.PrintDump();
         }
         [Test]
-        public async Task LNURLPayrequest()
+        public async Task LNURLPayRequest()
         {
             var result = await LNURLSharp.Logic.LNURLClient.FetchInformation(new Uri("https://safier.com/.well-known/lnurlp/richardj"), new System.Net.Http.HttpClient()) as LNURLPayResponse;
             Assert.That(result != null);
@@ -65,6 +65,32 @@ namespace LNURLSharp.Tests
             Assert.That(result.CommentAllowed == null);
             Assert.That(result.Metadata == "[[\"text/plain\",\"Send sats to richardj@safier.com\"],[\"text/identifier\",\"richardj@safier.com\"]]");
             Assert.That(result.Tag == "payRequest");
+        }
+
+        [Test]
+        public async Task LNURLWithdrawRequest()
+        {
+            var parsed = "lightning:LNURL1DP68GURN8GHJ7MRWW4EXCTNXD9SHG6NPVCHXXMMD9AKXUATJDSKHW6T5DPJ8YCTH8AEK2UMND9HKU0FEV3JX2V35VCUNXE348YMRVVEJ8QMN2DPCV5UNYER9XUMRXCECVSMNJDTRV3SN2WTYV3JR2CM9V4JNJE3SXP3RXEFSXVCRVEPJV9JR2RZJM8W".ParseLNURL();
+            var result = await LNURLSharp.Logic.LNURLClient.FetchInformation(parsed.uri, new System.Net.Http.HttpClient()) as LNURLWithdrawRequest;
+            Assert.That(result != null);
+            Assert.That(result.Callback.UrlDecode().StartsWith("https://lnurl.fiatjaf.com/lnurl-withdraw/callback/"));
+            Assert.That(result.DefaultDescription == "sample withdraw");
+            Assert.That(result.Tag == "withdrawRequest");
+        }
+
+        [Test]
+        public async Task LNURLWithdrawRequestAndSubmission()
+        {
+            var parsed = "lightning:LNURL1DP68GURN8GHJ7MRWW4EXCTNXD9SHG6NPVCHXXMMD9AKXUATJDSKHW6T5DPJ8YCTH8AEK2UMND9HKU0FEV3JX2V35VCUNXE348YMRVVEJ8QMN2DPCV5UNYER9XUMRXCECVSMNJDTRV3SN2WTYV3JR2CM9V4JNJE3SXP3RXEFSXVCRVEPJV9JR2RZJM8W".ParseLNURL();
+            var result = await LNURLSharp.Logic.LNURLClient.FetchInformation(parsed.uri, new System.Net.Http.HttpClient()) as LNURLWithdrawRequest;
+            Assert.That(result != null);
+            Assert.That(result.Callback.UrlDecode().StartsWith("https://lnurl.fiatjaf.com/lnurl-withdraw/callback/"));
+            Assert.That(result.DefaultDescription == "sample withdraw");
+            Assert.That(result.Tag == "withdrawRequest");
+            //now lets get some sats
+            var inv = lighningClient.AddInvoice(new Invoice { ValueMsat = result.MinWithdrawable, Expiry=600 });
+            var response = await result.SendRequest(inv.PaymentRequest, new System.Net.Http.HttpClient());
+            response.PrintDump();
         }
 
         [Test]
