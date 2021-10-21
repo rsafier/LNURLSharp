@@ -78,7 +78,7 @@ namespace LNURLSharp.Logic
         /// <param name="payerJsonData"></param>
         /// <param name="expiryInSeconds"></param>
         /// <returns></returns>
-        public static async Task<LNURLPayInvoiceResponse> BuildLNURLPayInvoiceResponse(this Lnrpc.Lightning.LightningClient client, long amount, string[,] originalMetadata, 
+        public static async Task<(LNURLPayInvoiceResponse Response, string RHashBase64, string DescriptionHash)> BuildLNURLPayInvoiceResponseV2(this Lnrpc.Lightning.LightningClient client, long amount, string[,] originalMetadata, 
             string payerJsonData = null, int expiryInSeconds = 600)
         {
             var descriptionToBeHashed = originalMetadata.ToJson();
@@ -98,7 +98,14 @@ namespace LNURLSharp.Logic
             {
                 pr = invoice.PaymentRequest,
             };
-            return response;
+            return (response, invoice.RHash.ToBase64(),Convert.ToHexString(descriptionHash));
+        }
+
+        public static async Task<LNURLPayInvoiceResponse> BuildLNURLPayInvoiceResponse(this Lnrpc.Lightning.LightningClient client, long amount, string[,] originalMetadata,
+            string payerJsonData = null, int expiryInSeconds = 600)
+        {
+            var data = await BuildLNURLPayInvoiceResponseV2(client, amount, originalMetadata, payerJsonData, expiryInSeconds);
+            return data.Response;
         }
 
         public static async Task<bool> VerifyLNURLPayInvoice(this Lnrpc.Lightning.LightningClient client, LNURLPayResponse req, string payRequest, long amount) 

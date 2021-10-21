@@ -3,14 +3,16 @@ using System;
 using LNURLSharp.DB;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace LNURLSharp.Migrations
 {
     [DbContext(typeof(LNURLContext))]
-    partial class LNURLContextModelSnapshot : ModelSnapshot
+    [Migration("20211021050347_RenamesAndFields")]
+    partial class RenamesAndFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,19 +27,7 @@ namespace LNURLSharp.Migrations
                     b.Property<string>("Comment")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("DescriptionHash")
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("Expired")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("ExpiryDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("FallbackAddr")
+                    b.Property<DateTime>("CreateDate")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("LNDServerPubkey")
@@ -46,13 +36,7 @@ namespace LNURLSharp.Migrations
                     b.Property<string>("Metadata")
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("Paid")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("Payreq")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("RHashBase64")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Username")

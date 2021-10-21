@@ -58,8 +58,16 @@ namespace LNURLSharp.DB
         public string Comment { get; set; }
         public string Metadata { get; set; }
         public string Payreq { get; set; }
+        public string RHashBase64 { get; set; }
+        public string DescriptionHash { get; set; }
+        public string FallbackAddr { get; set; }
         public string Username { get; set; }
-        public DateTime CreateDate { get; set; }
+        public DateTime CreationDate { get; set; }
+        public DateTime ExpiryDate { get; set; }
+
+        //Flags
+        public bool Paid { get; set; }
+        public bool Expired { get; set; }
 
         public string LNDServerPubkey { get; set; }
         public LNDServer LNDServer { get; set; }

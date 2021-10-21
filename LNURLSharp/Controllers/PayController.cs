@@ -73,20 +73,23 @@ namespace LNURLSharp.Controllers
             metadata[0, 1] = $"Send sats to {username}";
             metadata[1, 0] = @"text/identifier";
             metadata[1, 1] = $"{username}";
-            var response = await LNURLSharp.Logic.LNURLPayLogic.BuildLNURLPayInvoiceResponse(node.LightningClient, amount, metadata, expiryInSeconds: settings.Pay.InvoiceExpiryInSeconds);
-
+            var response = await LNURLSharp.Logic.LNURLPayLogic.BuildLNURLPayInvoiceResponseV2(node.LightningClient, amount, metadata, expiryInSeconds: settings.Pay.InvoiceExpiryInSeconds);
+            var createDate = DateTime.UtcNow;
             db.Invoices.Add(new Invoice
             {
                 Comment = comment,
-                CreateDate = DateTime.UtcNow,
+                CreationDate  = createDate,
+                ExpiryDate = createDate.AddSeconds(settings.Pay.InvoiceExpiryInSeconds),
+                RHashBase64 = response.RHashBase64,
+                DescriptionHash = response.DescriptionHash,
                 Username =username,
                 LNDServerPubkey = node.LocalNodePubKey,
                 Metadata = metadata.ToJson(),
-                Payreq = response.pr,
+                Payreq = response.Response.pr,
             });
             db.SaveChanges();
             db.Dispose();
-            return response.ToJson();
+            return response.Response.ToJson();
         }
 
         [HttpGet]
