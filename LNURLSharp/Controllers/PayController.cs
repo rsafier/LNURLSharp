@@ -29,11 +29,11 @@ namespace LNURLSharp.Controllers
         private LNURLContext db;
 
         public PayController(Microsoft.Extensions.Options.IOptions<LNURLSettings> options, ILogger<PayController> logger, 
-            IServiceProvider provider, LNURLContext context)
+            IServiceProvider provider, LNURLContext context, LNDNodeConnection lnd)
         {
             settings = options.Value;
             this.logger = logger;
-            node = provider.GetRequiredService<LNDNodeConnection>();
+            node = lnd;
             db = context;
         }
 
@@ -42,6 +42,16 @@ namespace LNURLSharp.Controllers
         public async Task<string> MakeLNURLpInvoiceEndpoint()
         {           
             var username = Request.Path.Value.SplitOnLast("/").Last();
+            if (!Request.Query.ContainsKey("amount"))
+            {
+                //no amount
+                var error = new LNURLStatusResponse()
+                {
+                    Status = "ERROR",
+                    Reason = $"Amount parameter is required.",
+                };
+                return error.ToJson();
+            }
             var amount = long.Parse(Request.Query["amount"]);
             Request.Query.TryGetValue("comment", out var comment);
             if (comment.Count > 0)
@@ -77,7 +87,7 @@ namespace LNURLSharp.Controllers
             var createDate = DateTime.UtcNow;
             db.Invoices.Add(new Invoice
             {
-                Comment = comment,
+                Comment = comment.Count > 0 ? comment[0] : null,
                 CreationDate  = createDate,
                 ExpiryDate = createDate.AddSeconds(settings.Pay.InvoiceExpiryInSeconds),
                 RHashBase64 = response.RHashBase64,
@@ -88,7 +98,6 @@ namespace LNURLSharp.Controllers
                 Payreq = response.Response.pr,
             });
             db.SaveChanges();
-            db.Dispose();
             return response.Response.ToJson();
         }
 
