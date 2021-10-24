@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Text.Json;
-using System.Threading.Tasks; 
+using System.Threading.Tasks;
 
 namespace LNURLSharp.Logic
 {
@@ -30,4 +30,5 @@ namespace LNURLSharp.Logic
 
         public string PayLink { get; set; }
     }
+
 }
