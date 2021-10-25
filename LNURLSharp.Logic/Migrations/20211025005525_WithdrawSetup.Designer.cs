@@ -3,14 +3,16 @@ using System;
 using LNURLSharp.DB;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace LNURLSharp.Migrations
 {
     [DbContext(typeof(LNURLContext))]
-    partial class LNURLContextModelSnapshot : ModelSnapshot
+    [Migration("20211025005525_WithdrawSetup")]
+    partial class WithdrawSetup
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -83,27 +85,15 @@ namespace LNURLSharp.Migrations
                     b.ToTable("LNDServers");
                 });
 
-            modelBuilder.Entity("LNURLSharp.DB.WithdrawSetup", b =>
+            modelBuilder.Entity("LNURLSharp.DB.PaySetup", b =>
                 {
-                    b.Property<int>("WithdrawSetupId")
+                    b.Property<int>("PaySetupId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool>("Completed")
-                        .HasColumnType("INTEGER");
+                    b.HasKey("PaySetupId");
 
-                    b.Property<string>("K1")
-                        .HasColumnType("TEXT");
-
-                    b.Property<long>("MaxWithdrawable")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<long>("MinWithdrawable")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("WithdrawSetupId");
-
-                    b.ToTable("WithdrawSetups");
+                    b.ToTable("PaySetups");
                 });
 
             modelBuilder.Entity("LNURLSharp.DB.Invoice", b =>

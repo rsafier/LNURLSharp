@@ -14,7 +14,7 @@ namespace LNURLSharp.DB
     {
         public DbSet<LNDServer> LNDServers { get; set; }
         public DbSet<Invoice> Invoices { get; set; }
-        public DbSet<PaySetup> PaySetups { get; set; }
+        public DbSet<WithdrawSetup> WithdrawSetups { get; set; }
 
         public string DbPath { get; private set; }
 
@@ -37,9 +37,13 @@ namespace LNURLSharp.DB
             => options.UseSqlite($"Data Source={DbPath}");
     }
 
-    public class PaySetup
+    public class WithdrawSetup
     {
-        public int PaySetupId { get; set; }
+        public int WithdrawSetupId { get; set; }
+        public long MaxWithdrawable { get; set; }
+        public long MinWithdrawable { get; set; }
+        public bool Completed { get; set; }
+        public string K1 { get; set; }
     }
 
     [Index(nameof(Pubkey), IsUnique =true)]

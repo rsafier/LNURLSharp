@@ -15,6 +15,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+using Microsoft.OpenApi.Models;
+
 namespace LNURLSharp
 {
     public class Startup
@@ -56,6 +58,33 @@ namespace LNURLSharp
                 options.HttpsPort = 443;
             });
 
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Libre.Lightning", Version = "v1" });
+                c.AddSecurityDefinition("ApiKey", new OpenApiSecurityScheme
+                {
+                    Description = "ApiKey must appear in header",
+                    Type = SecuritySchemeType.ApiKey,
+                    Name = "ApiKey",
+                    In = ParameterLocation.Header
+                });
+                var key = new OpenApiSecurityScheme()
+                {
+                    Reference = new OpenApiReference
+                    {
+                        Type = ReferenceType.SecurityScheme,
+                        Id = "ApiKey"
+                    },
+                    Type = SecuritySchemeType.ApiKey,
+                    In = ParameterLocation.Header
+                };
+                var requirement = new OpenApiSecurityRequirement
+                {
+                   { key, new List<string>() }
+                };
+                c.AddSecurityRequirement(requirement);
+            });
+
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, LNURLContext dbContext, LNDNodeConnection nodeConnection, ILogger<Startup> logger)
@@ -79,6 +108,8 @@ namespace LNURLSharp
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Libre.Lightning v1"));
             }
             else
             {
