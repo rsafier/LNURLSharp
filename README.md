@@ -79,7 +79,8 @@ dotnet build -c Release -o bin
 
 #### Notes
 ---
-- Currently only supports LNURLp specs, more to come.
+- Supports LNURL spec # 01 03 06 12 16
+- Limited support of LUD 18 (has data structures and proper hashing but no mechenism yet to define response settings)
 ---
 Lightning Tips to: tips@safier.com
 
