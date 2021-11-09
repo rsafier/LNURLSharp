@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net5.0</TargetFramework>
+		<TargetFrameworks>net6.0</TargetFrameworks>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<PackageProjectUrl>https://github.com/PLEBNET-PLAYGROUND/LNDroneController</PackageProjectUrl>
 		<PackageId>LNURLSharp.Logic</PackageId>
@@ -16,13 +16,13 @@
 
 	<ItemGroup>
 		<PackageReference Include="LNDroneController.LND" Version="0.1.1108.2210" />
-		<PackageReference Include="Microsoft.Data.Sqlite.Core" Version="5.0.11" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.11" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.11">
+		<PackageReference Include="Microsoft.Data.Sqlite.Core" Version="6.0.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.0">
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.11" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.0" />
 	</ItemGroup>
 
 </Project>
