@@ -5,7 +5,7 @@
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<PackageProjectUrl>https://github.com/PLEBNET-PLAYGROUND/LNDroneController</PackageProjectUrl>
 		<PackageId>LNURLSharp.Logic</PackageId>
-		<Version>0.2.$([System.DateTime]::UtcNow.ToString(MMdd)).$([System.DateTime]::UtcNow.ToString(HHmm))</Version>
+		<Version>0.3.$([System.DateTime]::UtcNow.ToString(MMdd)).$([System.DateTime]::UtcNow.ToString(HHmm))</Version>
 		<Authors>Richard Safier</Authors>
 		<PackageDescription>LNURLSharp.Logic LND Implementation</PackageDescription>
 		<RepositoryUrl>https://github.com/rsafier/LNURLSharp</RepositoryUrl>
